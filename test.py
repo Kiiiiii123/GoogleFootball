@@ -4,6 +4,7 @@ env = football_env.create_environment(
     env_name='11_vs_11_stochastic',
     render=True
 )
+
 state = env.reset()
 done = False
 while not done:
@@ -15,3 +16,5 @@ print(state_dim)
 
 n_actions = env.action_space.n
 print(n_actions)
+
+
