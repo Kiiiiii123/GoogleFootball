@@ -34,5 +34,23 @@ class BackboneNet(nn.Module):
 
 
 class OutputNet(nn.Module):
-        def __init__(self):
-            super(OutputNet, self).__init__()
+    def __init__(self, act_size):
+        super(OutputNet, self).__init__()
+        self.backbone = BackboneNet()
+        self.actor = nn.Linear(512, act_size)
+        self.critic = nn. Linear(512, 1)
+
+        # init the actor
+        nn.init.orthogonal_(self.actor.weight.data, gain=0.01)
+        nn.init.constant_(self.actor.bias.data, 0)
+
+        # init the critic
+        nn.init.orthogonal_(self.critic.weight.data)
+        nn.init.constant_(self.critic.bias.data, 0)
+
+    def forward(self, inputs):
+        x = self.backbone(inputs)
+        pi = F.softmax(self.actor(x), dim=1)
+        value = self.critic(x)
+        return pi, value
+
