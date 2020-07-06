@@ -11,8 +11,28 @@ class BackboneNet(nn.Module):
         self.conv3 = nn.Conv2d(64, 32, 3, stride=1)
         self.fc1 = nn.Linear(32 * 5 * 8, 512)
 
+        # init the weight
+        nn.init.orthogonal_(self.conv1.weight.data, gain=nn.init.calculate_gain('relu'))
+        nn.init.orthogonal_(self.conv2.weight.data, gain=nn.init.calculate_gain('relu'))
+        nn.init.orthogonal_(self.conv3.weight.data, gain=nn.init.calculate_gain('relu'))
+        nn.init.orthogonal_(self.fc1.weight.data, gain=nn.init.calculate_gain('relu'))
 
+        # init the bias
+        nn.init.constant_(self.conv1.bias.data, 0)
+        nn.init.constant_(self.conv2.bias.data, 0)
+        nn.init.constant_(self.conv3.bias.data, 0)
+        nn.init.constant_(self.fc1.bias.data, 0)
 
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
+        x = x.view(-1, 32 * 5 * 8)
+        x = F.relu(self.fc1(x))
+
+        return x
 
 
 class OutputNet(nn.Module):
+        def __init__(self):
+            super(OutputNet, self).__init__()
