@@ -11,6 +11,7 @@ def get_args():
     parse.add_argument('--log-dir', type=str, default='logs/', help='the folder to save log')
     parse.add_argument('--num-workers', type=int, help='the number of workers to collect samples')
     parse.add_argument('--nsteps', type=int, default=128, help='the steps to collect samples')
+    parse.add_argument('--total-frames', type=int, default=int(2e6), help='the total frames for training')
     args = parse.parse_args()
 
     return args

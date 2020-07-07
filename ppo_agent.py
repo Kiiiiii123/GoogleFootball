@@ -4,6 +4,8 @@ from torch import optim
 import copy
 import os
 
+from lib import utils
+
 
 class PPOAgent:
     def __init__(self, envs, args, net):
@@ -33,6 +35,9 @@ class PPOAgent:
         self.obs[:] = self.envs.reset()
 
         self.dones = [False for _ in range(self.args.num_workers)]
-        self.logger =
+        self.logger = utils.config_logger(self.log_path)
+
+    def learn(self):
+
 
 
