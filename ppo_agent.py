@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 import torch
 from torch import optim
 import copy
@@ -28,5 +28,11 @@ class PPOAgent:
         self.log_path = self.args.log_dir + self.args.env_name + '.log'
 
         # get the observation
+        self.batch_obs_shape = (self.args.num_workers * self.args.nsteps, ) + self.envs.observation_space.shape
+        self.obs = np.zeros((self.args.num_workers, ) + self.envs.observation_space.shape, dtype=self.envs.observation_space.dtype.name)
+        self.obs[:] = self.envs.reset()
+
+        self.dones = [False for _ in range(self.args.num_workers)]
+        self.logger =
 
 
