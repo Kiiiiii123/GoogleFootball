@@ -47,7 +47,13 @@ class PPOAgent:
             mb_obs, mb_rewards, mb_actions, mb_dones, mb_values = [], [], [], [], []
             if self.args.lr_decay:
                 self.adjust_learning_rate(iteration, iter_num)
-            
+
+
+    def get_tensor(self, obs):
+        obs_tensor = torch.tensor(np.transpose(obs, (0, 3, 1, 2)), dtype=torch.float32)
+        if self.args.cuda:
+            obs_tensor.cuda()
+        return obs_tensor
 
     def adjust_learning_rate(self, iteration, iter_num):
         lr_frac = 1 - (iteration / iter_num)
