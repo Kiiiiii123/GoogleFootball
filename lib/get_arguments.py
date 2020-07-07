@@ -12,6 +12,7 @@ def get_args():
     parse.add_argument('--num-workers', type=int, help='the number of workers to collect samples')
     parse.add_argument('--nsteps', type=int, default=128, help='the steps to collect samples')
     parse.add_argument('--total-frames', type=int, default=int(2e6), help='the total frames for training')
+    parse.add_argument('--lr-decay', action='store_true', help='if use learning rate decay during training')
     args = parse.parse_args()
 
     return args

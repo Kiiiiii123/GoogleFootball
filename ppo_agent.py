@@ -37,7 +37,15 @@ class PPOAgent:
         self.dones = [False for _ in range(self.args.num_workers)]
         self.logger = utils.config_logger(self.log_path)
 
-    def learn(self):
+    def rollout(self):
+        # get the reward to calculate other information
+        episode_rewards = torch.zeros([self.args.num_workers, 1])
+        final_rewards = torch.zeros([self.args.num_workers, 1])
+
+        iter_num = self.args.total_frames // (self.args.num_workers * self.args.nsteps)
+        for iteration in range(iter_num):
+            obs, rewards, actions, dones, values = [], [], [], [], []
+
 
 
 
