@@ -1,4 +1,7 @@
 import logging
+import torch
+from torch.distributions.categorical import Categorical
+import numpy as np
 
 
 def config_logger(log_dir):
@@ -12,4 +15,9 @@ def config_logger(log_dir):
     logger.addHandler(chlr)
     logger.addHandler(fhlr)
     return logger
+
+
+def select_actions(pi):
+    actions = Categorical(pi).sample()
+    return actions.detach().cpu().numpy().squeeze()
 
