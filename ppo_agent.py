@@ -44,8 +44,14 @@ class PPOAgent:
 
         iter_num = self.args.total_frames // (self.args.num_workers * self.args.nsteps)
         for iteration in range(iter_num):
-            obs, rewards, actions, dones, values = [], [], [], [], []
+            mb_obs, mb_rewards, mb_actions, mb_dones, mb_values = [], [], [], [], []
+            if self.args.lr_decay:
+                self.adjust_learning_rate(iteration, iter_num)
+            
 
-
-
+    def adjust_learning_rate(self, iteration, iter_num):
+        lr_frac = 1 - (iteration / iter_num)
+        adjust_lr = self.args.lr * lr_frac
+        for param_group in self.optimizer.param_groups:
+            param_group['lr'] = adjust_lr
 
