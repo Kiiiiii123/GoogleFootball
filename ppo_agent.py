@@ -37,7 +37,7 @@ class PPOAgent:
         self.dones = [False for _ in range(self.args.num_workers)]
         self.logger = utils.config_logger(self.log_path)
 
-    def rollout(self):
+    def learn(self):
         # get the reward to calculate other information
         episode_rewards = torch.zeros([self.args.num_workers, 1])
         final_rewards = torch.zeros([self.args.num_workers, 1])
@@ -53,6 +53,7 @@ class PPOAgent:
                     values, pis = self.net(obs_tensor)
                 actions = utils.select_actions(pis)
 
+                # start to store information
                 mb_obs.append(self.obs)
                 mb_actions.append(actions)
                 mb_dones.append(self.dones)
