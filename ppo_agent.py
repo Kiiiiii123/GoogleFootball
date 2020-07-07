@@ -47,6 +47,25 @@ class PPOAgent:
             mb_obs, mb_rewards, mb_actions, mb_dones, mb_values = [], [], [], [], []
             if self.args.lr_decay:
                 self.adjust_learning_rate(iteration, iter_num)
+            for step in range(self.args.nsteps):
+                with torch.no_grad():
+                    obs_tensor = self.get_tensor(self.obs)
+                    values, pis = self.net(obs_tensor)
+                actions = utils.select_actions(pis)
+
+                mb_obs.append(self.obs)
+                mb_actions.append(actions)
+                mb_dones.append(self.dones)
+                mb_values.append(values.detach().cpu().numpy().squeeze())
+
+                # execute the actions in the environment
+                obs, rewards, dones, _ = self.envs.step(actions)
+                self.dones = dones
+                mb_rewards.append(rewards)
+
+                # clear the observation
+
+
 
 
     def get_tensor(self, obs):
