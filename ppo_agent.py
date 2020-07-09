@@ -65,6 +65,12 @@ class PPOAgent:
                 mb_rewards.append(rewards)
 
                 # clear the observation
+                for n, done in enumerate(dones):
+                    if done:
+                        obs[n] = obs[n] * 0
+                self.obs = obs
+
+                # process the reward
 
 
 
