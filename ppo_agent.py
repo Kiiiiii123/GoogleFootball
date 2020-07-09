@@ -71,7 +71,27 @@ class PPOAgent:
                 self.obs = obs
 
                 # process the reward
+                rewards = torch.tensor(np.expand_dims(np.stack(rewards), 1), dtype=torch.float32)
+                episode_rewards += rewards
+                masks = torch.tensor([[0.0] if done else [1.0] for done in dones], dtype=torch.float32)
+                final_rewards *= masks
+                final_rewards += (1 - masks) * episode_rewards
+                episode_rewards *= masks
 
+            # process the rollouts
+            mb_obs = np.asarray(mb_obs, dtype=np.float32)
+            mb_actions = np.asarray(mb_actions, dtype=np.float32)
+            mb_rewards = np.asarray(mb_rewards, dtype=np.float32)
+            mb_dones = np.asarray(mb_dones, dtype=np.bool)
+            mb_values = np.asarray(mb_values, dtype=np.float32)
+
+            # calculate the last state value
+            with torch.no_grad():
+                obs_tensor = self.get_tensor(self.obs)
+                last_values, _ = self.net(obs_tensor)
+                last_values.detach().cpu().numpy().suqeeze()
+
+            # start to compute advantages
 
 
 
