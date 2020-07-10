@@ -87,12 +87,14 @@ class PPOAgent:
 
             # calculate the last state value
             with torch.no_grad():
-                obs_tensor = self.get_tensor(self.obs)
-                last_values, _ = self.net(obs_tensor)
-                last_values.detach().cpu().numpy().suqeeze()
+                last_obs_tensor = self.get_tensor(self.obs)
+                last_values, _ = self.net(last_obs_tensor)
+                last_values = last_values.detach().cpu().numpy().suqeeze()
 
             # start to compute advantages
-
+            mb_returns = np.zeros_like(mb_rewards)
+            mb_advs = np.zeros_like(mb_rewards)
+            last_gae = 0.0
 
 
     def get_tensor(self, obs):
