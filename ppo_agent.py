@@ -95,6 +95,28 @@ class PPOAgent:
             mb_returns = np.zeros_like(mb_rewards)
             mb_advs = np.zeros_like(mb_rewards)
             last_gae = 0.0
+            for i in reversed(range(self.args.nsteps)):
+                if i == self.args.nsteps - 1:
+                    next_terminal = 1.0 - self.dones
+                    next_values = last_values
+                else:
+                    next_terminal = 1.0 - mb_dones[i + 1]
+                    next_values = mb_values[i + 1]
+                delta = mb_rewards[i] + self.args.gamma * next_terminal * next_values - mb_values[i]
+                mb_advs[i] = last_gae = delta + self.args.gamma * self.args.tau * next_terminal * last_gae
+            mb_returns = mb_advs + mb_values
+
+            # process the rollouts again
+            mb_obs = mb_obs.swapaxes(0, 1).reshape(self.batch_obs_shape)
+            mb_actions = mb_actions.swapaxes(0, 1).flatten()
+            mb_advs = mb_advs.swapaxes(0, 1).flatten()
+            mb_returns = mb_returns.swapaxes(0, 1).flatten()
+
+            self.old_net.load_state_dict(self.net.state_dict())
+
+
+
+
 
 
     def get_tensor(self, obs):
