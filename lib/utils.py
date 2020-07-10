@@ -21,3 +21,9 @@ def select_actions(pi):
     actions = Categorical(pi).sample()
     return actions.detach().cpu().numpy().squeeze()
 
+
+def evaluate_actions(pi, actions):
+    distr = Categorical(pi)
+    log_prob = distr.log_prob(actions).unsqueeze(-1)
+    entropy = distr.entropy().mean()
+    return log_prob, entropy
