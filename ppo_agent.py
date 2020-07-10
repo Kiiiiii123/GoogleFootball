@@ -135,6 +135,20 @@ class PPOAgent:
                 mb_advs = advantages[index_slice]
 
                 # convert the mini-batches to tensor
+                mb_obs = self.get_tensor(mb_obs)
+                mb_actions = torch.tensor(mb_actions, dtype=torch.float32)
+                mb_returns = torch.tensor(mb_returns, dtype=torch.float32).squeeze(1)
+                mb_advs = torch.tensor(mb_advs, dtype=torch.float32).squeeze(1)
+                # normalize the advantage
+                mb_advs = (mb_advs - mb_advs.mean()) / (mb_advs.std() + 1e-8)
+
+                if self.args.cuda:
+                    mb_actions = mb_actions.cuda()
+                    mb_returns = mb_returns.cuda()
+                    mb_advs = mb_advs.cuda()
+
+                # start to calculate the loss
+
 
 
 
