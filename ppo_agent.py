@@ -112,6 +112,7 @@ class PPOAgent:
             mb_advs = mb_advs.swapaxes(0, 1).flatten()
             mb_returns = mb_returns.swapaxes(0, 1).flatten()
 
+            # update the network
             self.old_net.load_state_dict(self.net.state_dict())
             self.update_network(mb_obs, mb_actions, mb_returns, mb_advs)
 
