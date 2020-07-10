@@ -15,6 +15,7 @@ def get_args():
     parse.add_argument('--lr-decay', action='store_true', help='if use learning rate decay during training')
     parse.add_argument('--tau', type=float, default=0.95, help='the generalized advantage estimator coefficient')
     parse.add_argument('--batch-size', type=int, default=8, help='the batch size of updating')
+    parse.add_argument('--epoch', type=int, default=4, help='the epoch during training')
     args = parse.parse_args()
 
     return args

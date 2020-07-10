@@ -120,6 +120,23 @@ class PPOAgent:
 
 
     def update_network(self, obs, actions, returns, advantages):
+        indexes = np.arange(obs.shape[0])
+        batch_num = obs.shape[0] // self.args.batch_size
+        for _ in range(self.args.epoch):
+            np.random.shuffle(indexes)
+            for start in range(0, obs.shape[0], batch_num):
+                end = start + batch_num
+                index_slice = indexes[start:end]
+
+                # get the mini-batches
+                mb_obs = obs[index_slice]
+                mb_actions = actions[index_slice]
+                mb_returns = returns[index_slice]
+                mb_advs = advantages[index_slice]
+
+                # convert the mini-batches to tensor
+
+
 
 
     def get_tensor(self, obs):
