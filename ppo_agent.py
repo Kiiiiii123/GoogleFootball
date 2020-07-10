@@ -114,7 +114,7 @@ class PPOAgent:
 
             # update the network
             self.old_net.load_state_dict(self.net.state_dict())
-            self.update_network(mb_obs, mb_actions, mb_returns, mb_advs)
+            policy_loss, value_loss, entropy_loss = self.update_network(mb_obs, mb_actions, mb_returns, mb_advs)
 
 
 
