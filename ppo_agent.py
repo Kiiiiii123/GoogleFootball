@@ -147,7 +147,18 @@ class PPOAgent:
                     mb_returns = mb_returns.cuda()
                     mb_advs = mb_advs.cuda()
 
-                # start to calculate the loss
+                # value loss
+                mb_values, pis = self.old_net(mb_obs)
+                value_loss = (mb_returns - mb_values).pow(2).mean()
+
+                # policy loss and entropy loss
+                with torch.no_grad():
+                    _, old_pis = self.old_net(mb_obs)
+                    old_log_prob, _ = utils.evaluate_actions(old_pis, mb_actions)
+                    old_log_prob = old_log_prob.detach()
+                log_prob, entropy_loss = utils.evaluate_actions(pis, mb_actions)
+                prob_ratio = torch.exp(log_prob - old_log_prob)
+
 
 
 
