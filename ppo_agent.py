@@ -113,10 +113,12 @@ class PPOAgent:
             mb_returns = mb_returns.swapaxes(0, 1).flatten()
 
             self.old_net.load_state_dict(self.net.state_dict())
+            self.update_network(mb_obs, mb_actions, mb_returns, mb_advs)
 
 
 
 
+    def update_network(self, obs, actions, returns, advantages):
 
 
     def get_tensor(self, obs):
