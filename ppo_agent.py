@@ -3,6 +3,7 @@ import torch
 from torch import optim
 import copy
 import os
+from datetime import datetime
 
 from lib import utils
 
@@ -118,7 +119,11 @@ class PPOAgent:
 
             # display the training information and save the model
             if iteration % self.args.display_interval == 0:
-
+                self.logger.info('[{}] update: {} / {}, Frames: {}, Rewards: {:.3f}, Max: {:.3f}, Min: {:.3f}: Policy ' \
+                                 'Loss: {:.3f}, Value Loss: {:.3f}, Entropy Loss: {:.3f}'.format(datetime.now(), \
+                                iteration, iter_num, (iteration + 1)*self.args.num_workers*self.args.nsteps, \
+                                final_rewards.mean().item(), final_rewards.max().item(), final_rewards.min().item(), \
+                                policy_loss, value_loss, entropy_loss))
 
     def update_network(self, obs, actions, returns, advantages):
         indexes = np.arange(obs.shape[0])
