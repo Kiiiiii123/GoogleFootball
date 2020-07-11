@@ -4,9 +4,10 @@ from ppo_agent import PPOAgent
 import gfootball.env as football_env
 
 
-def create_single_football_env(args)
+def create_single_football_env(args):
     env = football_env.create_environment(env_name=args.env_name, stacked=True, )
     return env
+
 
 if __name__ == '__main__':
     args = get_arguments.get_args()
