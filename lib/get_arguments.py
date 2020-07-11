@@ -21,6 +21,8 @@ def get_args():
     parse.add_argument('--eloss-coef', type=float,default=0.01, help='the coefficient of entropy loss')
     parse.add_argument('--max-grad-norm', type=float, default=0.5, help='the clip grad norm param')
     parse.add_argument('--display-interval', type=int, default=10, help='the interval that display log information')
+    parse.add_argument('--seed', type=int, default=123, help='the random seeds')
+    parse.add_argument('--lr', type=float, default=0.00008, help='the learning rate of the algorithm')
     args = parse.parse_args()
 
     return args
