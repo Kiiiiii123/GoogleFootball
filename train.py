@@ -11,7 +11,7 @@ def create_single_football_env(args)
 if __name__ == '__main__':
     args = get_arguments.get_args()
     # create vectorized environments for multi-processing
-    envs = SubprocVecEnv([lambda _i=i: create_single_football_env(args) for i in range(args.num_workers)])
+    envs = SubprocVecEnv([(lambda _i=i: create_single_football_env(args)) for i in range(args.num_workers)])
     network = model.OutputNet(envs.action_space.n)
     agent = PPOAgent(envs, args, network)
     agent.learn()
