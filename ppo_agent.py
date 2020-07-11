@@ -116,8 +116,7 @@ class PPOAgent:
             self.old_net.load_state_dict(self.net.state_dict())
             policy_loss, value_loss, entropy_loss = self.update_network(mb_obs, mb_actions, mb_returns, mb_advs)
 
-
-
+            # display the training information
 
     def update_network(self, obs, actions, returns, advantages):
         indexes = np.arange(obs.shape[0])
