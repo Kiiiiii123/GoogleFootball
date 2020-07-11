@@ -158,11 +158,19 @@ class PPOAgent:
                     old_log_prob = old_log_prob.detach()
                 log_prob, entropy_loss = utils.evaluate_actions(pis, mb_actions)
                 prob_ratio = torch.exp(log_prob - old_log_prob)
+                surr1 = prob_ratio * mb_advs
+                surr2 = torch.clamp(prob_ratio, 1 - self.args.clip, 1 + self.args.clip) * mb_advs
+                policy_loss = -torch.min(surr1, surr2).mean()
 
+                # final total loss
+                total_loss = policy_loss + value_loss * self.args.vloss_coef + entropy_loss * self.args.eloss_coef
 
-
-
-
+                # update
+                self.optimizer.zero_grad()
+                total_loss.backward()
+                torch.nn.utils.clip_grad_norm_(self.net.parameters(), max_norm=self.args.max_grad_norm)
+                self.optimizer.step()
+        return policy_loss.item(), value_loss.item(), entropy_loss.item()
 
     def get_tensor(self, obs):
         obs_tensor = torch.tensor(np.transpose(obs, (0, 3, 1, 2)), dtype=torch.float32)

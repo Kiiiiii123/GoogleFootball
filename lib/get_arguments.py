@@ -16,6 +16,10 @@ def get_args():
     parse.add_argument('--tau', type=float, default=0.95, help='the generalized advantage estimator coefficient')
     parse.add_argument('--batch-size', type=int, default=8, help='the batch size of updating')
     parse.add_argument('--epoch', type=int, default=4, help='the epoch during training')
+    parse.add_argument('--clip', type=float, default=0.27, help='the ratio clip param')
+    parse.add_argument('--vloss-coef', type=float, default=0.5, help='the coefficient of value loss')
+    parse.add_argument('--eloss-coef', type=float,default=0.01, help='the coefficient of entropy loss')
+    parse.add_argument('--max-grad-norm', type=float, default=0.5, help='the clip grad norm param')
     args = parse.parse_args()
 
     return args
