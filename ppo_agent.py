@@ -119,7 +119,11 @@ class PPOAgent:
 
             # display the training information and save the model
             if iteration % self.args.display_interval == 0:
-                self.logger.info('[{}] update: {} / {}, Frames: {}, Rewards: {:.3f}, Max: {:.3f}, Min: {:.3f}: Policy Loss: {:.3f}, Value Loss: {:.3f}, Entropy Loss: {:.3f}'.format(datetime.now(), iteration, iter_num, (iteration + 1)*self.args.num_workers*self.args.nsteps, final_rewards.mean().item(), final_rewards.max().item(), final_rewards.min().item(), policy_loss, value_loss, entropy_loss))
+                self.logger.info('[{}] update: {} / {}, Frames: {}, Rewards: {:.3f}, Max: {:.3f}, Min: {:.3f}: \
+                    Policy Loss: {:.3f}, Value Loss: {:.3f}, Entropy Loss: {:.3f}'.format(datetime.now(), iteration, \
+                    iter_num, (iteration + 1)*self.args.num_workers*self.args.nsteps, final_rewards.mean().item(), \
+                    final_rewards.max().item(), final_rewards.min().item(), policy_loss, value_loss, entropy_loss))
+                torch.save(self.net.state_dict(), self.model_path + '/model.pt')
 
     def update_network(self, obs, actions, returns, advantages):
         indexes = np.arange(obs.shape[0])
@@ -172,7 +176,8 @@ class PPOAgent:
                 total_loss.backward()
                 torch.nn.utils.clip_grad_norm_(self.net.parameters(), max_norm=self.args.max_grad_norm)
                 self.optimizer.step()
-        return policy_loss.item(), value_loss.item(), entropy_loss.item()
+
+                return policy_loss.item(), value_loss.item(), entropy_loss.item()
 
     def get_tensor(self, obs):
         obs_tensor = torch.tensor(np.transpose(obs, (0, 3, 1, 2)), dtype=torch.float32)
