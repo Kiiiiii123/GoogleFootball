@@ -20,6 +20,7 @@ def get_args():
     parse.add_argument('--vloss-coef', type=float, default=0.5, help='the coefficient of value loss')
     parse.add_argument('--eloss-coef', type=float,default=0.01, help='the coefficient of entropy loss')
     parse.add_argument('--max-grad-norm', type=float, default=0.5, help='the clip grad norm param')
+    parse.add_argument('--display-intreval', type=int, default=10, help='the interval that display log information')
     args = parse.parse_args()
 
     return args
